@@ -86,7 +86,7 @@ class App extends React.Component {
           in={true}
           appear={true}
           timeout={500}
-          classNames={styles}
+          classNames={{ ...styles }}
           unmountOnExit
         >
           {/* <Title/> */}

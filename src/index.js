@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import store from './redux/store';
+import actions from './redux/actions';
 
 import 'modern-normalize';
 import './styles.scss';
