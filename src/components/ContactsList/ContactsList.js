@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import phonebookActions from '../../redux/phonebook/phonebook-actions';
 
 import styles from './ContactsList.module.scss';
 
@@ -34,4 +36,20 @@ ContactsList.propTypes = {
   ).isRequired,
   deleteContact: PropTypes.func.isRequired,
 };
-export default ContactsList;
+
+const filterContactsValue = (filter, contacts) => {
+  const normalizeFilter = filter.toLowerCase();
+  return contacts.filter(({ name }) => {
+    return name.toLowerCase().includes(normalizeFilter);
+  });
+};
+
+const mapStateToProps = ({ phonebook: { filter, contacts } }) => {
+  return { contacts: filterContactsValue(filter, contacts) };
+};
+
+const mapDispatchToProps = dispatch => ({
+  deleteContact: id => dispatch(phonebookActions.deleteContact(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactsList);

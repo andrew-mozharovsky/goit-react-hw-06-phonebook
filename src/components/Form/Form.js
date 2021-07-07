@@ -1,5 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import phonebookActions from '../../redux/phonebook/phonebook-actions';
+import { CSSTransition } from 'react-transition-group';
+import Alert from '../Alert';
 
 import styles from './Form.module.scss';
 
@@ -10,13 +14,35 @@ class Form extends React.Component {
   state = {
     name: '',
     number: '',
+    alert: false,
   };
-  getContactName = e => {
+  getContactValue = e => {
     const { value, name } = e.currentTarget;
     this.setState({ [name]: value });
   };
+
+  findContactName = contactName => {
+    const { contacts } = this.props;
+    return contacts.find(({ name }) => name === contactName);
+  };
+
+  // addContact = ({ name, number }) => {
+  //   if (this.findContactName(name)) {
+  //     this.setState({ alert: true });
+  //     setTimeout(() => this.setState({ alert: false }), 1500);
+  //     // alert(`${name} is already in contacts`);
+  //     return;
+  //   }
   handleSubmit = e => {
+    const { name } = this.state;
     e.preventDefault();
+    if (this.findContactName(name)) {
+      // this.resetInput()
+      this.setState({ alert: true });
+      setTimeout(() => this.setState({ alert: false }), 2000);
+
+      return;
+    }
     this.props.addContact(this.state);
     this.resetInput();
   };
@@ -24,11 +50,19 @@ class Form extends React.Component {
     this.setState({ name: '', number: '' });
   };
   render() {
-    const { name, number } = this.state;
-    const alert = this.props.children;
+    const { name, number, alert } = this.state;
+
     return (
       <form onSubmit={this.handleSubmit} className={styles.form}>
-        {alert}
+        <CSSTransition
+          in={alert}
+          appear
+          timeout={500}
+          classNames={styles}
+          unmountOnExit
+        >
+          <Alert />
+        </CSSTransition>
         <label className={styles.label}>
           Name
           <input
@@ -40,7 +74,7 @@ class Form extends React.Component {
             title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
             required
             value={name}
-            onChange={this.getContactName}
+            onChange={this.getContactValue}
           />
         </label>
         <label className={styles.label}>
@@ -54,7 +88,7 @@ class Form extends React.Component {
             title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
             required
             value={number}
-            onChange={this.getContactName}
+            onChange={this.getContactValue}
           />
         </label>
         <button type="submit" className={styles.button}>
@@ -64,4 +98,14 @@ class Form extends React.Component {
     );
   }
 }
-export default Form;
+
+const mapStateToProps = state => ({
+  contacts: state.phonebook.contacts,
+});
+
+const mapDispatchToProps = dispatch => ({
+  addContact: (name, number) =>
+    dispatch(phonebookActions.addContact(name, number)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
