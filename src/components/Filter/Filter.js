@@ -15,6 +15,7 @@ const Filter = ({ filter, onChange }) => {
         name="filter"
         onChange={onChange}
         value={filter}
+        autoComplete="off"
       />
     </label>
   );

@@ -26,18 +26,11 @@ class Form extends React.Component {
     return contacts.find(({ name }) => name === contactName);
   };
 
-  // addContact = ({ name, number }) => {
-  //   if (this.findContactName(name)) {
-  //     this.setState({ alert: true });
-  //     setTimeout(() => this.setState({ alert: false }), 1500);
-  //     // alert(`${name} is already in contacts`);
-  //     return;
-  //   }
   handleSubmit = e => {
     const { name } = this.state;
     e.preventDefault();
     if (this.findContactName(name)) {
-      // this.resetInput()
+      this.resetInput();
       this.setState({ alert: true });
       setTimeout(() => this.setState({ alert: false }), 2000);
 

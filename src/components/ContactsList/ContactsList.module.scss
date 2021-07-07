@@ -5,12 +5,11 @@
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid rgb(182, 182, 182);
-  padding-bottom: 5px;
+  padding-bottom: 7px;
+  padding-top: 7px;
   padding-left: 3px;
   padding-right: 3px;
-  //   &:hover {
-  //     background-color: rgb(223, 246, 253);
-  //   }
+
   &:not(:last-child) {
     margin-bottom: 10px;
   }
