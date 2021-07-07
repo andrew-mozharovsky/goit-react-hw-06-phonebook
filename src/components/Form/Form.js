@@ -27,7 +27,7 @@ class Form extends React.Component {
   };
 
   handleSubmit = e => {
-    const { name } = this.state;
+    const { name, number } = this.state;
     e.preventDefault();
     if (this.findContactName(name)) {
       this.resetInput();
@@ -36,7 +36,7 @@ class Form extends React.Component {
 
       return;
     }
-    this.props.addContact(this.state);
+    this.props.addContact(name, number);
     this.resetInput();
   };
   resetInput = () => {
